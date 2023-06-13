@@ -8,6 +8,7 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 
@@ -15,7 +16,8 @@ class CacheIdCalculatorPlugin
 {
     public function __construct(
         private readonly DeploymentConfig $deploymentConfig,
-        private readonly Writer $envWriter
+        private readonly Writer $envWriter,
+        private readonly ConfigDataFactory $configDataFactory
     ) {
     }
 
@@ -31,7 +33,7 @@ class CacheIdCalculatorPlugin
         $cache = $this->deploymentConfig->get(FrontendPool::KEY_CACHE);
 
         if ($cache === null || !isset($cache['frontend'])) {
-            $config = new ConfigData(ConfigFilePool::APP_ENV);
+            $config = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
             $config->set('cache/frontend', []);
             $this->envWriter->saveConfig([$config->getFileKey() => $config->getData()], false, null, [], true);
         }
