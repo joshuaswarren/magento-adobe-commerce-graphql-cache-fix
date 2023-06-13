@@ -14,8 +14,8 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 class CacheIdCalculatorPlugin
 {
     public function __construct(
-        readonly private DeploymentConfig $deploymentConfig,
-        readonly private Writer $envWriter
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly Writer $envWriter
     ) {
     }
 
@@ -24,6 +24,7 @@ class CacheIdCalculatorPlugin
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetCacheId(CacheIdCalculator $subject): void
     {
